@@ -260,8 +260,8 @@ langflow.db
 .docusaurus/
 
 /tmp/*
-src/backend/langflow/frontend/
-src/backend/base/langflow/frontend/
+# src/backend/langflow/frontend/
+# src/backend/base/langflow/frontend/
 .docker
 scratchpad*
 chroma*/*
