@@ -93,7 +93,7 @@ class CustomComponent(BaseComponent):
         Args:
             **data: Additional keyword arguments to initialize the custom component.
         """
-        self.cache: TTLCache = TTLCache(maxsize=1024, ttl=60)
+        self.cache: TTLCache = TTLCache(maxsize=1024, ttl=180)
         self._logs: list[Log] = []
         self._results: dict = {}
         self._artifacts: dict = {}

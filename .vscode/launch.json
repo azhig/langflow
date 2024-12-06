@@ -10,7 +10,8 @@
 
       "args": [
         "--factory",
-        "langflow.main:create_app",
+        // "langflow.main:create_app",
+        "langflow.main:setup_app",
         "--port",
         "7860",
         "--reload",

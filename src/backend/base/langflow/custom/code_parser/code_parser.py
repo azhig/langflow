@@ -61,7 +61,7 @@ class CodeParser:
 
     def __init__(self, code: str | type) -> None:
         """Initializes the parser with the provided code."""
-        self.cache: TTLCache = TTLCache(maxsize=1024, ttl=60)
+        self.cache: TTLCache = TTLCache(maxsize=1024, ttl=180)
         if isinstance(code, type):
             if not inspect.isclass(code):
                 msg = "The provided code must be a class."
