@@ -1,3 +1,3 @@
-from .cohere_rerank import CohereRerankComponent
+from .isu import IsuComponent
 
-__all__ = ["CohereRerankComponent"]
+__all__ = ["IsuComponent"]

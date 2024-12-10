@@ -803,6 +803,7 @@ class Graph:
         session_id: str | None = None,
         stream: bool = False,
         fallback_to_env_vars: bool = False,
+        ext_headers: dict[str, Any] | None = None
     ) -> list[RunOutputs]:
         """Runs the graph with the given inputs.
 
@@ -1043,6 +1044,7 @@ class Graph:
         flow_id: str | None = None,
         flow_name: str | None = None,
         user_id: str | None = None,
+        context: dict[str, Any] |None = None
     ) -> Graph:
         """Creates a graph from a payload.
 
@@ -1060,7 +1062,7 @@ class Graph:
         try:
             vertices = payload["nodes"]
             edges = payload["edges"]
-            graph = cls(flow_id=flow_id, flow_name=flow_name, user_id=user_id)
+            graph = cls(flow_id=flow_id, flow_name=flow_name, user_id=user_id, context=context)
             graph.add_nodes_and_edges(vertices, edges)
         except KeyError as exc:
             logger.exception(exc)

@@ -173,17 +173,17 @@ async def build_graph_from_data(flow_id: str, payload: dict, **kwargs):
     return graph
 
 
-async def build_graph_from_db_no_cache(flow_id: str, session: AsyncSession):
+async def build_graph_from_db_no_cache(flow_id: str, session: AsyncSession, context:dict[str,Any]|None = None):
     """Build and cache the graph."""
     flow: Flow | None = await session.get(Flow, flow_id)
     if not flow or not flow.data:
         msg = "Invalid flow ID"
         raise ValueError(msg)
-    return await build_graph_from_data(flow_id, flow.data, flow_name=flow.name, user_id=str(flow.user_id))
+    return await build_graph_from_data(flow_id, flow.data, flow_name=flow.name, user_id=str(flow.user_id), context=context)
 
 
-async def build_graph_from_db(flow_id: str, session: AsyncSession, chat_service: ChatService):
-    graph = await build_graph_from_db_no_cache(flow_id, session)
+async def build_graph_from_db(flow_id: str, session: AsyncSession, chat_service: ChatService, context:dict[str,Any]|None = None):
+    graph = await build_graph_from_db_no_cache(flow_id, session, context)
     await chat_service.set_cache(flow_id, graph)
     return graph
 
@@ -192,9 +192,10 @@ async def build_and_cache_graph_from_data(
     flow_id: str,
     chat_service: ChatService,
     graph_data: dict,
+    context:dict[str,Any]|None = None
 ):  # -> Graph | Any:
     """Build and cache the graph."""
-    graph = Graph.from_payload(graph_data, flow_id)
+    graph = Graph.from_payload(graph_data, flow_id, context=context)
     await chat_service.set_cache(flow_id, graph)
     return graph
 

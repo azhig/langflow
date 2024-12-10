@@ -10,6 +10,7 @@ import { CustomProductSelector } from "@/customization/components/custom-product
 import {
   ENABLE_DATASTAX_LANGFLOW,
   ENABLE_NEW_LOGO,
+  ENABLE_ISU,
 } from "@/customization/feature-flags";
 import { useCustomNavigate } from "@/customization/hooks/use-custom-navigate";
 import useTheme from "@/customization/hooks/use-custom-theme";
@@ -79,7 +80,7 @@ export default function AppHeader(): JSX.Element {
 
       {/* Right Section */}
       <div className={`flex items-center gap-2`}>
-        {!ENABLE_DATASTAX_LANGFLOW && (
+        {!ENABLE_DATASTAX_LANGFLOW  && ENABLE_ISU && (
           <>
             <Button
               unstyled
@@ -129,7 +130,7 @@ export default function AppHeader(): JSX.Element {
             </Button>
           </ShadTooltip>
         </AlertDropdown>
-        {!ENABLE_DATASTAX_LANGFLOW && (
+        {!ENABLE_DATASTAX_LANGFLOW && ENABLE_ISU && (
           <>
             <ShadTooltip
               content="Go to LangflowStore"

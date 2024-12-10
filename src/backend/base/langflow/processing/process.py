@@ -30,6 +30,7 @@ async def run_graph_internal(
     session_id: str | None = None,
     inputs: list[InputValueRequest] | None = None,
     outputs: list[str] | None = None,
+    ext_headers: dict[str, Any] | None = None,
 ) -> tuple[list[RunOutputs], str]:
     """Run the graph and generate the result."""
     inputs = inputs or []
@@ -55,6 +56,7 @@ async def run_graph_internal(
         stream=stream,
         session_id=effective_session_id or "",
         fallback_to_env_vars=fallback_to_env_vars,
+        ext_headers = ext_headers,
     )
     return run_outputs, effective_session_id
 

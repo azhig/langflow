@@ -262,6 +262,7 @@ import {
 } from "../icons/GradientSparkles";
 import { GroqIcon } from "../icons/Groq";
 import { GigaChatIcon } from "../icons/GigaChat";
+import { IsuIcon } from "../icons/Isu";
 import { HCDIcon } from "../icons/HCD";
 import { HuggingFaceIcon } from "../icons/HuggingFace";
 import { IFixIcon } from "../icons/IFixIt";
@@ -515,7 +516,7 @@ export const SIDEBAR_BUNDLES = [
   { display_name: "CrewAI", name: "crewai", icon: "CrewAI" },
   { display_name: "NotDiamond", name: "notdiamond", icon: "NotDiamond" },
   { display_name: "Composio", name: "composio", icon: "Composio" },
-  { display_name: "ISU", name: "isu", icon: "Cohere" },
+  { display_name: "ISU", name: "isu", icon: "Isu" },
   { display_name: "Firecrawl", name: "firecrawl", icon: "FirecrawlCrawlApi" },
   { display_name: "Unstructured", name: "unstructured", icon: "Unstructured" },
   { display_name: "Git", name: "git", icon: "GitLoader" },
@@ -625,6 +626,7 @@ export const nodeIconsLucide: iconsType = {
   FirecrawlScrapeApi: FirecrawlIcon,
   GitbookLoader: GitBookIcon,
   GigaChat: GigaChatIcon,
+  Isu:IsuIcon,
   GoogleSearchAPIWrapper: GoogleIcon,
   GoogleSearchResults: GoogleIcon,
   GoogleSearchRun: GoogleIcon,

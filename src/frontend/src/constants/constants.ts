@@ -740,6 +740,7 @@ export const BUNDLES_SIDEBAR_FOLDER_NAMES = [
   "Notion",
   "AssemblyAI",
   "assemblyai",
+  
 ];
 
 export const AUTHORIZED_DUPLICATE_REQUESTS = [

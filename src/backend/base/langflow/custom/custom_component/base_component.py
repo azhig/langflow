@@ -31,6 +31,7 @@ class BaseComponent:
     field_config: dict = {}
     _user_id: str | UUID | None = None
     _template_config: dict = {}
+    _ext_headers: dict | None = None
 
     def __init__(self, **data) -> None:
         self.cache: TTLCache = TTLCache(maxsize=1024, ttl=180)
@@ -43,6 +44,9 @@ class BaseComponent:
     def __setattr__(self, key, value) -> None:
         if key == "_user_id" and self._user_id is not None:
             logger.warning("user_id is immutable and cannot be changed.")
+        if key == "_ext_headers" and self._ext_headers is not None:
+            logger.warning("_ext_headers is immutable and cannot be changed.")
+        
         super().__setattr__(key, value)
 
     @cachedmethod(cache=operator.attrgetter("cache"))

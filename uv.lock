@@ -20,6 +20,8 @@ source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "caio" },
 ]
+sdist = { url = "https://files.pythonhosted.org/packages/67/e2/d7cb819de8df6b5c1968a2756c3cb4122d4fa2b8fc768b53b7c9e5edb646/aiofile-3.9.0.tar.gz", hash = "sha256:e5ad718bb148b265b6df1b3752c4d1d83024b93da9bd599df74b9d9ffcf7919b", size = 17943 }
+
 
 [[package]]
 name = "aiofiles"

@@ -190,6 +190,11 @@ class CustomComponent(BaseComponent):
         return self.graph.user_id
 
     @property
+    def ext_headers(self):
+        if hasattr(self, "_ext_headers") and self._ext_headers:
+            return self._ext_headers
+
+    @property
     def flow_id(self):
         return self.graph.flow_id
 

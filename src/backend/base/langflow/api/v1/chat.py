@@ -8,7 +8,7 @@ import typing
 import uuid
 from typing import TYPE_CHECKING, Annotated
 
-from fastapi import APIRouter, BackgroundTasks, Body, HTTPException
+from fastapi import APIRouter, BackgroundTasks, Body, HTTPException, Request
 from fastapi.responses import StreamingResponse
 from loguru import logger
 from sqlmodel import select
@@ -78,6 +78,7 @@ async def retrieve_vertices_order(
     stop_component_id: str | None = None,
     start_component_id: str | None = None,
     session: AsyncDbSession,
+    request: Request,
 ) -> VerticesOrderResponse:
     """Retrieve the vertices order for a given flow.
 
@@ -103,10 +104,10 @@ async def retrieve_vertices_order(
         flow_id_str = str(flow_id)
         # First, we need to check if the flow_id is in the cache
         if not data:
-            graph = await build_graph_from_db(flow_id=flow_id_str, session=session, chat_service=chat_service)
+            graph = await build_graph_from_db(flow_id=flow_id_str, session=session, chat_service=chat_service, context=dict(request.headers))
         else:
             graph = await build_and_cache_graph_from_data(
-                flow_id=flow_id_str, graph_data=data.model_dump(), chat_service=chat_service
+                flow_id=flow_id_str, graph_data=data.model_dump(), chat_service=chat_service, context=dict(request.headers)
             )
         graph = graph.prepare(stop_component_id, start_component_id)
 
@@ -154,11 +155,14 @@ async def build_flow(
     log_builds: bool | None = True,
     current_user: CurrentActiveUser,
     session: AsyncDbSession,
+    request: Request
 ):
     chat_service = get_chat_service()
     telemetry_service = get_telemetry_service()
     if not inputs:
         inputs = InputValueRequest(session=str(flow_id))
+    
+    context=dict(request.headers)
 
     async def build_graph_and_get_order() -> tuple[list[str], list[str], Graph]:
         start_time = time.perf_counter()
@@ -166,13 +170,13 @@ async def build_flow(
         try:
             flow_id_str = str(flow_id)
             if not data:
-                graph = await build_graph_from_db_no_cache(flow_id=flow_id_str, session=session)
+                graph = await build_graph_from_db_no_cache(flow_id=flow_id_str, session=session, context=dict(request.headers))
             else:
                 async with async_session_scope() as new_session:
                     result = await new_session.exec(select(Flow.name).where(Flow.id == flow_id_str))
                     flow_name = result.first()
                 graph = await build_graph_from_data(
-                    flow_id_str, data.model_dump(), user_id=str(current_user.id), flow_name=flow_name
+                    flow_id_str, data.model_dump(), user_id=str(current_user.id), flow_name=flow_name, context=context
                 )
             graph.validate_stream()
             if stop_component_id or start_component_id:

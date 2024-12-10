@@ -3,7 +3,7 @@ import { useLogout } from "@/controllers/API/queries/auth";
 import { CustomFeedbackDialog } from "@/customization/components/custom-feedback-dialog";
 import { CustomHeaderMenuItemsTitle } from "@/customization/components/custom-header-menu-items-title";
 import { CustomProfileIcon } from "@/customization/components/custom-profile-icon";
-import { ENABLE_DATASTAX_LANGFLOW } from "@/customization/feature-flags";
+import { ENABLE_DATASTAX_LANGFLOW, ENABLE_ISU} from "@/customization/feature-flags";
 import { useCustomNavigate } from "@/customization/hooks/use-custom-navigate";
 import useAuthStore from "@/stores/authStore";
 import { useDarkStore } from "@/stores/darkStore";
@@ -105,20 +105,27 @@ export const AccountMenu = () => {
                   <GithubStarComponent />
                 </div>
               </HeaderMenuItemLink>
-            ) : (
+            ) : (ENABLE_ISU ?(
+              <>
               <HeaderMenuItemLink
                 newPage
                 href="https://github.com/langflow-ai/langflow/discussions"
               >
                 Share Feedback on Github
               </HeaderMenuItemLink>
-            )}
-            <HeaderMenuItemLink newPage href="https://twitter.com/langflow_ai">
+              <HeaderMenuItemLink newPage href="https://twitter.com/langflow_ai">
               Follow Langflow on X
-            </HeaderMenuItemLink>
-            <HeaderMenuItemLink newPage href="https://discord.gg/EqksyE2EX9">
-              Join the Langflow Discord
-            </HeaderMenuItemLink>
+              </HeaderMenuItemLink>
+              <HeaderMenuItemLink newPage href="https://discord.gg/EqksyE2EX9">
+                Join the Langflow Discord
+              </HeaderMenuItemLink>
+              </>
+            ) : (
+              <HeaderMenuItemLink newPage href="https://isu.sber.ru">
+                Присоединяйтесь к проекту в команде ИСУ
+              </HeaderMenuItemLink>
+            )
+            )}
           </HeaderMenuItemsSection>
           {ENABLE_DATASTAX_LANGFLOW ? (
             <HeaderMenuItemsSection>

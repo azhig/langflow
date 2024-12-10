@@ -3,7 +3,7 @@ from __future__ import annotations
 import asyncio
 import time
 from http import HTTPStatus
-from typing import TYPE_CHECKING, Annotated
+from typing import TYPE_CHECKING, Annotated, Any
 from uuid import UUID
 
 import sqlalchemy as sa
@@ -16,6 +16,7 @@ from fastapi import (
     Request,
     UploadFile,
     status,
+    Header
 )
 from loguru import logger
 from sqlmodel import select
@@ -101,6 +102,7 @@ async def simple_run_flow(
     *,
     stream: bool = False,
     api_key_user: User | None = None,
+    ext_headers:dict[str, Any] | None = None,
 ):
     if input_request.input_value is not None and input_request.tweaks is not None:
         validate_input_and_tweaks(input_request)
@@ -113,7 +115,7 @@ async def simple_run_flow(
             raise ValueError(msg)
         graph_data = flow.data.copy()
         graph_data = process_tweaks(graph_data, input_request.tweaks or {}, stream=stream)
-        graph = Graph.from_payload(graph_data, flow_id=flow_id_str, user_id=str(user_id), flow_name=flow.name)
+        graph = Graph.from_payload(graph_data, flow_id=flow_id_str, user_id=str(user_id), flow_name=flow.name, context=ext_headers)
         inputs = [
             InputValueRequest(
                 components=[],
@@ -140,6 +142,7 @@ async def simple_run_flow(
             inputs=inputs,
             outputs=outputs,
             stream=stream,
+            ext_headers = ext_headers
         )
 
         return RunResponse(outputs=task_result, session_id=session_id)
@@ -176,6 +179,7 @@ async def simplified_run_flow(
     input_request: SimplifiedAPIRequest | None = None,
     stream: bool = False,
     api_key_user: Annotated[UserRead, Depends(api_key_security)],
+    request:Request,
 ) -> RunResponse:
     """Executes a specified flow by ID.
 
@@ -252,6 +256,7 @@ async def simplified_run_flow(
             input_request=input_request,
             stream=stream,
             api_key_user=api_key_user,
+            ext_headers=dict(request.headers)
         )
         end_time = time.perf_counter()
         background_tasks.add_task(
